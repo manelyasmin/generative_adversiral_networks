@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>SUDOKU GAME</title>
+
+</head>
+<style type="text/css">      
+body{
+  margin:0;
+  padding:90px;
+  background:url(background.png);
+  background-size:cover;
+  background-position:center;
+  background-repeat: no-repeat;
+}   
+table { 
+border-collapse: collapse; 
+border-radius: 1.5em;
+overflow: hidden;
+font-family: Calibri, sans-serif;
+background-color: #8fc0a9; 
+}
+colgroup, tbody { 
+border: solid medium; 
+}
+td { 
+border: solid thin; 
+height: 3em; 
+width: 3em; 
+text-align: center; 
+padding: 0; 
+}
+.center {
+  margin-left: auto;
+  margin-right: auto;
+}
+.myButton {
+  padding:5px;
+  background-color: #dcdcdc;
+  border: 1px solid #666;
+  color:#000;
+  text-decoration:none;
+  border-radius: 1em;
+}
+a:hover {
+  color:#68b0ab;
+}
+a:focus {
+  color:#68b0ab;
+}
+</style> 
+<body >
+	<center><h1>Sudoku</h1></center>
+<table  class="center" id="sudoku">
+  <colgroup><col><col><col>
+  <colgroup><col><col><col>
+  <colgroup><col><col><col>
+  <tbody>
+    {%for i in range(0, 3)%} 
+   <tr>  {%for j in range(0, 9)%}
+             {%if(pandas_dataframe_sample[i][j]==0)%}
+                    <td contenteditable="true"> 
+              {%else%} <td> {{pandas_dataframe_sample[i][j]}} 
+             {% endif %} 
+         {% endfor %}
+    {% endfor %}
+  <tbody>
+    {%for i in range(3, 6)%} 
+    <tr>  {%for j in range(0, 9)%}
+             {%if(pandas_dataframe_sample[i][j]==0)%}
+                    <td contenteditable="true"> 
+              {%else%} <td> {{pandas_dataframe_sample[i][j]}} 
+             {% endif %} 
+         {% endfor %}
+    {% endfor %}
+  <tbody>
+    {%for i in range(6, 9)%} 
+     <tr>  {%for j in range(0, 9)%}
+             {%if(pandas_dataframe_sample[i][j]==0)%}
+                    <td contenteditable="true"> 
+              {%else%} <td> {{pandas_dataframe_sample[i][j]}} 
+             {% endif %} 
+         {% endfor %}
+    {% endfor %}
+</table>
+<br>
+<br>
+<center>
+<a href="#" class="myButton">Submit</a>      
+</center>
+<div >
+<h1 id="result" style="margin-right:20px; margin-top:300px;float:left;"><span> </span></h1>
+</div>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type=text/javascript>
+        $(".myButton").click(function(){
+                         myData = document.getElementById("sudoku").rows
+                    //console.log(myData)
+                    my_liste = []
+                    for (var i = 0; i < myData.length; i++) {
+                            el = myData[i].children
+                            my_el = []
+                            for (var j = 0; j < el.length; j++) {
+                                    my_el.push(el[j].innerText);
+                            }
+                            my_liste.push(my_el)
+
+                    }
+                        table = JSON.stringify(my_liste)
+                        console.log(table);
+                        $.ajax({
+                            type: "POST",
+                            url: "/submit",
+                            data: table,
+                            success: function(data){
+                              $('#result').text(' your solution is '+data);
+                            }
+                            });
+                        });
+</script>
+</body>
+</html>-
